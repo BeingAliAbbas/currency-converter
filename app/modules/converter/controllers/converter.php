@@ -58,17 +58,27 @@ class converter extends MX_Controller {
 			return;
 		}
 		
-		$result = $this->model->convert_currency($amount, $from, $to);
+		// Validate amount is greater than 0
+		$amount_float = floatval($amount);
+		if ($amount_float <= 0) {
+			echo json_encode([
+				'status' => 'error',
+				'message' => 'Amount must be greater than 0'
+			]);
+			return;
+		}
+		
+		$result = $this->model->convert_currency($amount_float, $from, $to);
 		
 		if ($result !== false) {
 			echo json_encode([
 				'status' => 'success',
 				'data' => [
-					'amount' => $amount,
+					'amount' => $amount_float,
 					'from' => $from,
 					'to' => $to,
 					'result' => $result,
-					'rate' => $result / $amount
+					'rate' => $amount_float > 0 ? ($result / $amount_float) : 0
 				]
 			]);
 		} else {

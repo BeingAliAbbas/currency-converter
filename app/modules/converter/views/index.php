@@ -225,7 +225,8 @@
     let debounceTimer;
     $('#amount, #from_currency, #to_currency').on('change input', function() {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(performConversion, 500);
+      // Longer debounce delay to prevent excessive API calls
+      debounceTimer = setTimeout(performConversion, 1000);
     });
 
     // Convert on Enter key
@@ -298,7 +299,11 @@
 
   // Format number with decimals
   function formatNumber(num) {
-    return parseFloat(num).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // Use more efficient number formatting
+    return parseFloat(num).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
   }
 
   // Show notification (using existing notification system if available)

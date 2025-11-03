@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class converter_model extends MY_Model {
 	
-	private $cache_file = 'currency_rates_cache.json';
 	private $cache_duration = 3600; // 1 hour cache
 	
 	public function __construct(){
@@ -59,7 +58,7 @@ class converter_model extends MY_Model {
 		
 		// If same currency, return same amount
 		if (strtoupper($from) === strtoupper($to)) {
-			return $amount;
+			return floatval($amount);
 		}
 		
 		// Get rates for the source currency
